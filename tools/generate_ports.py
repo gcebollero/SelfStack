@@ -10,5 +10,5 @@ if __name__ == "__main__":
             for _ports in _f['services'][_service].get('ports', []):
                 _results.append({'Container': _service, 'Host port': _ports.split(':')[0], 'Container port': _ports.split(':')[1]})
     df = pandas.DataFrame(_results)
-    with open('../ports.md', 'w') as md:
+    with open('ports.md', 'w') as md:
         md.write(df.to_markdown())
