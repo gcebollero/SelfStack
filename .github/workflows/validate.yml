@@ -22,7 +22,7 @@ jobs:
         run: python tools/generate_ports.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: [AUTO] Generate ports doc
+          commit_message: "[AUTO] Generate ports doc"
       - name: Print errors
         if: steps.script.outputs.error == 'true'
         run: |
