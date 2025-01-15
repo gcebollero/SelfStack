@@ -6,6 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -16,7 +19,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r tools/requirements.txt
       - name: execute py script 
-        run: python tools/validate.py
+        run: python tools/generate_ports.py
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: [AUTO] Generate ports doc
       - name: Print errors
         if: steps.script.outputs.error == 'true'
         run: |

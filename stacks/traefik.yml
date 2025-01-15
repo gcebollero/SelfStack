@@ -1,0 +1,38 @@
+services:
+
+  traefik:
+    image: traefik:${TRAEFIK_TAG_VERSION:-v3.1}
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - --providers.docker.network=traefik_DMZ
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=guillermocebollero@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - 80:80
+      - 443:443
+      - 18080:8080
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE:-/mnt/ServicesPool/portainer}/traefik/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - DMZ
+    labels:
+      wud.display.name: Traefik
+      wud.display.icon: si:traefikproxy
+      wud.watch.digest: true
+      wud.tag.include: ^v\d+\.\d+$$
+
+networks:
+  DMZ: {}
