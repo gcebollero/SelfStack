@@ -4,7 +4,7 @@ import pandas
 
 if __name__ == "__main__":
     _results = []
-    for _file in glob('../stacks/*.yml'):
+    for _file in glob('stacks/*.yml'):
         _f = yaml.safe_load(open(_file, 'r'))
         for _service in _f.get('services', []):
             for _ports in _f['services'][_service].get('ports', []):
